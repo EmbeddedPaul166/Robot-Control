@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         view.cpp \
     framegenerator.cpp \
-    globals.cpp
+    globals.cpp \
+    uart.cpp
 
 HEADERS += \
         view.h \
     framegenerator.h \
-    globals.h
+    globals.h \
+    uart.h
 
 FORMS += \
         view.ui
