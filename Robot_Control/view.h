@@ -1,9 +1,14 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <QImage>
 #include <QMainWindow>
 
-class Controller;
+class FrameGenerator;
 
 namespace Ui {
 class View;
@@ -14,21 +19,21 @@ class View : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit View(QWidget *parent = nullptr);
+    explicit View(QWidget *parent = 0);
     ~View();
+    void setup(FrameGenerator* pframe);
 
-    void setup(Controller *pController);
-    void initiateCameraViewUpdate(QImage image);
 private:
     Ui::View *ui;
     int m_width;
     int m_height;
-    QImage m_image;
-    Controller *m_pController;
+    void closeEvent (QCloseEvent *event);
+    void showEvent(QShowEvent *event);
 signals:
-    void updateCameraView();
+    void startTransmission();
+    void stop();
 public slots:
-    void onUpdateCameraView();
+    void onStream(QImage img);
 
 };
 

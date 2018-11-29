@@ -16,6 +16,36 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <layout class="QHBoxLayout" name="exitLayout">
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="exitButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Quit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="automaticModeLayout">
       <item>
        <spacer name="horizontalSpacer_5">
@@ -32,6 +62,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Turn on automatic mode</string>
         </property>
@@ -79,10 +115,13 @@
          </sizepolicy>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Panel</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="margin">
          <number>0</number>
@@ -136,6 +175,9 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="speedLabelLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QLabel" name="zeroPercentLabel">
         <property name="sizePolicy">
@@ -150,7 +192,7 @@
          </font>
         </property>
         <property name="text">
-         <string>0%</string>
+         <string>0 m/s</string>
         </property>
        </widget>
       </item>
@@ -189,7 +231,7 @@
          </font>
         </property>
         <property name="text">
-         <string>100%</string>
+         <string>1 m/s</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -201,7 +243,7 @@
     <item>
      <widget class="QSlider" name="speedPWMSlider">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -213,6 +255,9 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="firstHalfOfButtonsLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QPushButton" name="arcLeftButton">
         <property name="text">
@@ -238,17 +283,13 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="secondHalfOfButtonsLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <item>
        <widget class="QPushButton" name="turnLeftButton">
         <property name="text">
          <string>Turn left</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="moveBackwardButton">
-        <property name="text">
-         <string>Move backward</string>
         </property>
        </widget>
       </item>

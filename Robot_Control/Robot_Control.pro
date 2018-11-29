@@ -27,13 +27,11 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         view.cpp \
-    controller.cpp \
     framegenerator.cpp \
     globals.cpp
 
 HEADERS += \
         view.h \
-    controller.h \
     framegenerator.h \
     globals.h
 

@@ -1,17 +1,17 @@
 #include "view.h"
-#include "ui_view.h"
-#include "controller.h"
+#include "framegenerator.h"
 #include "globals.h"
+#include "ui_view.h"
+
 
 View::View(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::View),
-    m_width(),
-    m_height(),
-    m_pController(nullptr)
+    m_width(0),
+    m_height(0)
+
 {
     ui->setupUi(this);
-    connect(this, SIGNAL(updateCameraView()), this, SLOT(onUpdateCameraView()));
 }
 
 View::~View()
@@ -19,23 +19,31 @@ View::~View()
     delete ui;
 }
 
-void View::setup(Controller *pController)
+void View::setup(FrameGenerator* pframe)
 {
-    this->m_pController = pController;
+    connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
+    connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
+    connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
 }
 
-void View::initiateCameraViewUpdate(QImage image)
+void View::showEvent(QShowEvent *event)
 {
-    m_image = image;
-    emit updateCameraView();
+    QTimer::singleShot(100, this, SLOT(showFullScreen()));
+    emit startTransmission();
+}
+
+void View::closeEvent(QCloseEvent *event)
+{
+    emit stop();
 }
 
 
-void View::onUpdateCameraView()
+void View::onStream(QImage img)
 {
-    frameMutex.lock();
+    out.acquire();
     m_width = ui->cameraOutputLabel->width();
     m_height = ui->cameraOutputLabel->height();
-    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(m_image.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-    frameMutex.unlock();
+    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    in.release();
 }
+

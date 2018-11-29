@@ -1,3 +1,4 @@
 #include "globals.h"
 
-std::mutex frameMutex;
+QSemaphore in(1);
+QSemaphore out(0);

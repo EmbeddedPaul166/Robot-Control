@@ -1,30 +1,34 @@
-#ifndef FRAMEGENERATOR_H
-#define FRAMEGENERATOR_H
+#ifndef FRAMEGEN_H
+#define FRAMEGEN_H
 
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <QObject>
+#include <QtCore>
 #include <QImage>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+class View;
 
-class Controller;
-
-class FrameGenerator
+class FrameGenerator : public QThread
 {
+    Q_OBJECT
 public:
-    FrameGenerator();
-    virtual ~FrameGenerator();
-
-    void setup(Controller *pController);
-    void calibrateCamera();
-    void accessAndConvertCameraView();
-
+    explicit FrameGenerator(QObject *parent = nullptr);
 private:
+    void run();
     bool m_state;
-    bool m_isCameraCalibrated;
     cv::Mat m_frame;
-    QImage m_image;
-    Controller *m_pController;
+    QImage m_img;
+signals:
+    void stream(QImage img);
+    void clear();
+public slots:
+    void onStartTransmission();
+    void onStop();
+
 };
 
-#endif // FRAMEGENERATOR_H
+#endif // FRAMEGEN_H
