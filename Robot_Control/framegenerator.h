@@ -5,10 +5,11 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <QObject>
 #include <QtCore>
 #include <QImage>
+
+#include "objectdetector.h"
 
 class View;
 
@@ -22,6 +23,8 @@ private:
     bool m_state;
     cv::Mat m_frame;
     QImage m_img;
+    std::vector<cv::Vec3f> m_circles;
+    ObjectDetector m_objectDetector;
 signals:
     void stream(QImage img);
     void clear();

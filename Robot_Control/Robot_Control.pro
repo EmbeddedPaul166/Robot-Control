@@ -29,13 +29,15 @@ SOURCES += \
         view.cpp \
     framegenerator.cpp \
     globals.cpp \
-    uart.cpp
+    uart.cpp \
+    objectdetector.cpp
 
 HEADERS += \
         view.h \
     framegenerator.h \
     globals.h \
-    uart.h
+    uart.h \
+    objectdetector.h
 
 FORMS += \
         view.ui
