@@ -29,18 +29,21 @@ private:
     int m_width;
     int m_height;
     double m_maximumSpeed;
+    bool isAutomaticModeOn;
     void closeEvent (QCloseEvent *event);
     void showEvent(QShowEvent *event);
 signals:
     void startTransmission();
     void stop();
-    void sendSignal(int message, int value);
+    void sendSignal(int message, int value, int otherWheelSpeedPercentegeDuringArcing);
+    void sendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed);
     void stopSignal();
 public slots:
     void onStream(QImage img);
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();
+    void onTurnAutomaticModeButtonClick();
     void onSliderChange(int sliderValue);
     void onFailedUART();
 

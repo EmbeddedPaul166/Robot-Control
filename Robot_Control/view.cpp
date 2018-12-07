@@ -10,7 +10,8 @@ View::View(QWidget *parent) :
     ui(new Ui::View),
     m_width(0),
     m_height(0),
-    m_maximumSpeed(2)
+    m_maximumSpeed(2),
+    isAutomaticModeOn(false)
 
 {
     ui->setupUi(this);
@@ -26,7 +27,8 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
     connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
-    connect(this, SIGNAL(sendSignal(int, int)),pUART, SLOT(onSendSignal(int, int)));
+    connect(this, SIGNAL(sendSignal(int, int, int)),pUART, SLOT(onSendSignal(int, int, int)));
+    connect(this, SIGNAL(sendSignalAutomaticMode(int, int)),pUART, SLOT(onSendSignalAutomaticMode(int, int)));
     connect(pUART , SIGNAL(failedUART()),this , SLOT(onFailedUART()));
     connect(this, SIGNAL(stopSignal()),pUART, SLOT(onStopSignal()));
     connect(ui->moveForwardButton, SIGNAL(pressed()),this , SLOT(onButtonPressed()));
@@ -42,6 +44,8 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
     connect(ui->arcRightButton, SIGNAL(released()),this , SLOT(onButtonReleased()));
     connect(ui->arcLeftButton, SIGNAL(released()),this , SLOT(onButtonReleased()));
     connect(ui->speedSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
+    connect(ui->arcStrengthSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
+    connect(ui->automaticModeButton, SIGNAL(clicked()),this , SLOT(onTurnAutomaticModeButtonClick()));
 }
 
 void View::showEvent(QShowEvent *event)
@@ -69,26 +73,27 @@ void View::onStream(QImage img)
 void View::onButtonPressed()
 {
     int speedSliderValue = ui->speedSlider->value();
+    int arcStrengthPercentageValue = ui->arcStrengthSlider->value();
     int calculatedSpeed = speedSliderValue*static_cast<int>(m_maximumSpeed);
     if (sender() == ui->moveForwardButton)
     {
-        emit sendSignal(1, calculatedSpeed);
+        emit sendSignal(1, calculatedSpeed, arcStrengthPercentageValue);
     }
     else if (sender() == ui->turnRightButton)
     {
-        emit sendSignal(2, calculatedSpeed);
+        emit sendSignal(2, calculatedSpeed, arcStrengthPercentageValue);
     }
     else if (sender() == ui->turnLeftButton)
     {
-        emit sendSignal(3, calculatedSpeed);
+        emit sendSignal(3, calculatedSpeed, arcStrengthPercentageValue);
     }
     else if (sender() == ui->arcRightButton)
     {
-        emit sendSignal(4, calculatedSpeed);
+        emit sendSignal(4, calculatedSpeed, arcStrengthPercentageValue);
     }
     else if (sender() == ui->arcLeftButton)
     {
-        emit sendSignal(5, calculatedSpeed);
+        emit sendSignal(5, calculatedSpeed, arcStrengthPercentageValue);
     }
 }
 
@@ -109,10 +114,41 @@ void View::onButtonReleased()
     emit stopSignal();
 }
 
+void View::onTurnAutomaticModeButtonClick()
+{
+    isAutomaticModeOn = !isAutomaticModeOn;
+    if (isAutomaticModeOn)
+    {
+        ui->moveForwardButton->setEnabled(false);
+        ui->turnRightButton->setEnabled(false);
+        ui->turnLeftButton->setEnabled(false);
+        ui->arcRightButton->setEnabled(false);
+        ui->arcLeftButton->setEnabled(false);
+        ui->automaticModeButton->setText("Turn off automatic mode");
+    }
+    else if (!isAutomaticModeOn)
+    {
+        ui->moveForwardButton->setEnabled(true);
+        ui->turnRightButton->setEnabled(true);
+        ui->turnLeftButton->setEnabled(true);
+        ui->arcRightButton->setEnabled(true);
+        ui->arcLeftButton->setEnabled(true);
+        ui->automaticModeButton->setText("Turn on automatic mode");
+    }
+}
+
 void View::onSliderChange(int sliderValue)
 {
-    double calculatedSpeed = static_cast<int>(sliderValue)*m_maximumSpeed*0.01;
-    ui->speedDisplayLabel->setText(QString::number(calculatedSpeed));
+    if (sender() == ui->speedSlider)
+    {
+        double calculatedSpeed = static_cast<int>(sliderValue)*m_maximumSpeed*0.01;
+        ui->speedDisplayLabel->setText(QString::number(calculatedSpeed));
+    }
+    else if (sender() == ui->arcStrengthSlider)
+    {
+        ui->arcStrengthDisplayLabel->setText(QString::number(sliderValue) + "%");
+    }
+
 }
 
 void View::onFailedUART()
