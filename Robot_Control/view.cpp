@@ -28,6 +28,8 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
     connect(this, SIGNAL(sendSignal(int, int, int)),pUART, SLOT(onSendSignal(int, int, int)));
+    connect(this, SIGNAL(initiateAutomaticMode()),pUART, SLOT(onInitiateAutomaticMode()));
+    connect(this, SIGNAL(exitAutomaticMode()),pUART, SLOT(onExitAutomaticMode()));
     connect(this, SIGNAL(sendSignalAutomaticMode(int, int)),pUART, SLOT(onSendSignalAutomaticMode(int, int)));
     connect(pUART , SIGNAL(failedUART()),this , SLOT(onFailedUART()));
     connect(this, SIGNAL(stopSignal()),pUART, SLOT(onStopSignal()));
@@ -45,7 +47,6 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
     connect(ui->arcLeftButton, SIGNAL(released()),this , SLOT(onButtonReleased()));
     connect(ui->speedSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
     connect(ui->arcStrengthSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
-    connect(ui->automaticModeButton, SIGNAL(clicked()),this , SLOT(onTurnAutomaticModeButtonClick()));
 }
 
 void View::showEvent(QShowEvent *event)
@@ -101,7 +102,26 @@ void View::onButtonClicked()
 {
     if (sender() == ui->automaticModeButton)
     {
-        //something...
+        isAutomaticModeOn = !isAutomaticModeOn;
+        if (isAutomaticModeOn)
+        {
+            ui->moveForwardButton->setEnabled(false);
+            ui->turnRightButton->setEnabled(false);
+            ui->turnLeftButton->setEnabled(false);
+            ui->arcRightButton->setEnabled(false);
+            ui->arcLeftButton->setEnabled(false);
+            ui->automaticModeButton->setText("Turn off automatic mode");
+            emit initiateAutomaticMode();
+        }
+        else if (!isAutomaticModeOn)
+        {
+            ui->moveForwardButton->setEnabled(true);
+            ui->turnRightButton->setEnabled(true);
+            ui->turnLeftButton->setEnabled(true);
+            ui->arcRightButton->setEnabled(true);
+            ui->arcLeftButton->setEnabled(true);
+            ui->automaticModeButton->setText("Turn on automatic mode");
+        }
     }
     else if (sender() == ui->exitButton)
     {
@@ -114,28 +134,6 @@ void View::onButtonReleased()
     emit stopSignal();
 }
 
-void View::onTurnAutomaticModeButtonClick()
-{
-    isAutomaticModeOn = !isAutomaticModeOn;
-    if (isAutomaticModeOn)
-    {
-        ui->moveForwardButton->setEnabled(false);
-        ui->turnRightButton->setEnabled(false);
-        ui->turnLeftButton->setEnabled(false);
-        ui->arcRightButton->setEnabled(false);
-        ui->arcLeftButton->setEnabled(false);
-        ui->automaticModeButton->setText("Turn off automatic mode");
-    }
-    else if (!isAutomaticModeOn)
-    {
-        ui->moveForwardButton->setEnabled(true);
-        ui->turnRightButton->setEnabled(true);
-        ui->turnLeftButton->setEnabled(true);
-        ui->arcRightButton->setEnabled(true);
-        ui->arcLeftButton->setEnabled(true);
-        ui->automaticModeButton->setText("Turn on automatic mode");
-    }
-}
 
 void View::onSliderChange(int sliderValue)
 {

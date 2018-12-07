@@ -81,10 +81,16 @@ void UART::onSendSignal(int message, int value, int arcStrengthPercentage)
         serialPutchar (m_fileDescriptor, tensOfArcStrengthPercentage);
         serialPutchar (m_fileDescriptor, onesOfArcStrengthPercentage);*/
     }
-    else if (message == 6)
-    {
-        //serialPutchar(m_fileDescriptor, 'f');
-    }
+}
+
+void UART::onInitiateAutomaticMode()
+{
+    //serialPutchar(m_fileDescriptor, 'f');
+}
+
+void UART::onExitAutomaticMode()
+{
+    //serialPutchar(m_fileDescriptor, 'f');
 }
 
 void UART::onSendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed)

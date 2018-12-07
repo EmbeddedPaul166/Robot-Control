@@ -36,6 +36,8 @@ signals:
     void startTransmission();
     void stop();
     void sendSignal(int message, int value, int otherWheelSpeedPercentegeDuringArcing);
+    void initiateAutomaticMode();
+    void exitAutomaticMode();
     void sendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed);
     void stopSignal();
 public slots:
@@ -43,7 +45,6 @@ public slots:
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();
-    void onTurnAutomaticModeButtonClick();
     void onSliderChange(int sliderValue);
     void onFailedUART();
 
