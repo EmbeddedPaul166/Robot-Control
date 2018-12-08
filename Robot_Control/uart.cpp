@@ -18,68 +18,108 @@ void UART::initiateUART()
     }*/
 }
 
-void UART::codeSignal3Digit(int value, int &ones, int &tenths, int &hundredths)
-{
-    std::string message = std::to_string(value);
-    ones = message[0] - 48;
-    tenths = message[1] - 48;
-    hundredths = message[2] - 48;
-}
-
-void UART::codeSignal2Digit(int value, int &tens, int &ones)
-{
-    std::string message = std::to_string(value);
-    tens = message[0] - 48;
-    ones = message[1] - 48;
-}
 
 void UART::onSendSignal(int message, int value, int arcStrengthPercentage)
 {
-    int onesOfValue;
-    int tenthsOfValue;
-    int hundredthsOfValue;
-    codeSignal3Digit(value, onesOfValue, tenthsOfValue, hundredthsOfValue);
-    int tensOfArcStrengthPercentage;
-    int onesOfArcStrengthPercentage;
-    codeSignal2Digit(arcStrengthPercentage, tensOfArcStrengthPercentage, onesOfArcStrengthPercentage);
+    std::string valueInString = std::to_string(value);
+    std::string arctStrengthPercentageInString = std::to_string(arcStrengthPercentage);
     if (message == 1)
     {
-        /*serialPutchar (m_fileDescriptor, 'a');
-        serialPutchar (m_fileDescriptor, ones);
-        serialPutchar (m_fileDescriptor, tenths);
-        serialPutchar (m_fileDescriptor, hundredths);*/
+        if (message >= 100)
+        {
+            /*serialPutchar (m_fileDescriptor, 'a');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);
+            serialPutchar (m_fileDescriptor, valueInString[2]);*/
+        }
+        else
+        {
+            /*serialPutchar (m_fileDescriptor, 'a');
+            serialPutchar (m_fileDescriptor, '0');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);*/
+        }
+
     }
     else if (message == 2)
     {
-        /*serialPutchar (m_fileDescriptor, 'b');
-        serialPutchar (m_fileDescriptor, ones);
-        serialPutchar (m_fileDescriptor, tenths);
-        serialPutchar (m_fileDescriptor, hundredths);*/
+        if (message >= 100)
+        {
+            /*serialPutchar (m_fileDescriptor, 'b');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);
+            serialPutchar (m_fileDescriptor, valueInString[2]);*/
+        }
+        else
+        {
+            /*serialPutchar (m_fileDescriptor, 'a');
+            serialPutchar (m_fileDescriptor, '0');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);*/
+        }
+
     }
     else if (message == 3)
     {
-        /*serialPutchar(m_fileDescriptor, 'c');
-        serialPutchar (m_fileDescriptor, ones);
-        serialPutchar (m_fileDescriptor, tenths);
-        serialPutchar (m_fileDescriptor, hundredths);*/
+        if (message >= 100)
+        {
+            /*serialPutchar(m_fileDescriptor, 'c');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);
+            serialPutchar (m_fileDescriptor, valueInString[2]);*/
+        }
+        else
+        {
+            /*serialPutchar (m_fileDescriptor, 'a');
+            serialPutchar (m_fileDescriptor, '0');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);*/
+        }
+
     }
     else if (message == 4)
     {
-        /*serialPutchar(m_fileDescriptor, 'd');
-        serialPutchar (m_fileDescriptor, ones);
-        serialPutchar (m_fileDescriptor, tenths);
-        serialPutchar (m_fileDescriptor, hundredths)
-        serialPutchar (m_fileDescriptor, tensOfArcStrengthPercentage);
-        serialPutchar (m_fileDescriptor, onesOfArcStrengthPercentage);*/
+        if (message >= 100)
+        {
+            /*serialPutchar(m_fileDescriptor, 'd');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);
+            serialPutchar (m_fileDescriptor, valueInString[2])
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[0]);
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[1]);*/
+        }
+        else
+        {
+            /*serialPutchar(m_fileDescriptor, 'd');
+            serialPutchar (m_fileDescriptor, '0');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1])
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[0]);
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[1]);*/
+        }
+
     }
     else if (message == 5)
     {
-        /*serialPutchar(m_fileDescriptor, 'e');
-        serialPutchar (m_fileDescriptor, ones);
-        serialPutchar (m_fileDescriptor, tenths);
-        serialPutchar (m_fileDescriptor, hundredths);
-        serialPutchar (m_fileDescriptor, tensOfArcStrengthPercentage);
-        serialPutchar (m_fileDescriptor, onesOfArcStrengthPercentage);*/
+        if (message >= 100)
+        {
+            /*serialPutchar(m_fileDescriptor, 'e');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1]);
+            serialPutchar (m_fileDescriptor, valueInString[2]);
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[0]);
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[1]);*/
+        }
+        else
+        {
+            /*serialPutchar(m_fileDescriptor, 'd');
+            serialPutchar (m_fileDescriptor, '0');
+            serialPutchar (m_fileDescriptor, valueInString[0]);
+            serialPutchar (m_fileDescriptor, valueInString[1])
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[0]);
+            serialPutchar (m_fileDescriptor, arctStrengthPercentageInString[1]);*/
+        }
+
     }
 }
 
@@ -95,20 +135,34 @@ void UART::onExitAutomaticMode()
 
 void UART::onSendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed)
 {
-    int onesOfRightWheelSpeed;
-    int tenthsOfRightWheelSpeed;
-    int hundredthsOfRightWheelSpeed;
-    codeSignal3Digit(rightWheelSpeed, onesOfRightWheelSpeed, tenthsOfRightWheelSpeed, hundredthsOfRightWheelSpeed);
-    int onesOfLeftWheelSpeed;
-    int tenthsOfLeftWheelSpeed;
-    int hundredthsOfLeftWheelSpeed;
-    codeSignal3Digit(leftWheelSpeed, onesOfLeftWheelSpeed, tenthsOfLeftWheelSpeed, hundredthsOfLeftWheelSpeed);
-    /*serialPutchar (m_fileDescriptor, onesOfRightWheelSpeed);
-    serialPutchar (m_fileDescriptor, tenthsOfRightWheelSpeed);
-    serialPutchar (m_fileDescriptor, hundredthsOfRightWheelSpeed);
-    serialPutchar (m_fileDescriptor, onesOfLeftWheelSpeed);
-    serialPutchar (m_fileDescriptor, tenthsOfLeftWheelSpeed);
-    serialPutchar (m_fileDescriptor, hundredthsOfLeftWheelSpeed);*/
+    std::string rightWheelSpeedInString = std::to_string(rightWheelSpeed);
+    std::string leftWheelSpeedInString = std::to_string(leftWheelSpeed);
+    if (rightWheelSpeed >= 100)
+    {
+        /*serialPutchar (m_fileDescriptor, rightWheelSpeedInString[0]);
+        serialPutchar (m_fileDescriptor, rightWheelSpeedInString[1]);
+        serialPutchar (m_fileDescriptor, rightWheelSpeedInString[2]);*/
+    }
+    else
+    {
+        /*serialPutchar (m_fileDescriptor, '0');
+        serialPutchar (m_fileDescriptor, rightWheelSpeedInString[0]);
+        serialPutchar (m_fileDescriptor, rightWheelSpeedInString[1]);*/
+    }
+    if (leftWheelSpeed >= 100)
+    {
+        /*serialPutchar (m_fileDescriptor, leftWheelSpeedInString[0]);
+        serialPutchar (m_fileDescriptor, leftWheelSpeedInString[1]);
+        serialPutchar (m_fileDescriptor, leftWheelSpeedInString[2]);*/
+    }
+    else
+    {
+        /*serialPutchar (m_fileDescriptor, '0');
+        serialPutchar (m_fileDescriptor, leftWheelSpeedInString[0]);
+        serialPutchar (m_fileDescriptor, leftWheelSpeedInString[1]);*/
+    }
+
+
 }
 
 void UART::onStopSignal()
