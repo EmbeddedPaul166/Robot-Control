@@ -42,11 +42,20 @@ HEADERS += \
 FORMS += \
         view.ui
 
+
+INCLUDEPATH += /usr/local/include/opencv4
+LIBS += -L/usr/local/lib
+LIBS += -lopencv_core
+LIBS += -lopencv_imgproc
+LIBS += -lopencv_highgui
+LIBS += -lopencv_calib3d
+LIBS += -lopencv_objdetect
+LIBS += -lopencv_videoio
+LIBS += -lopencv_tracking
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix:!macx: LIBS += -L$$PWD/../../../../../usr/local/opencv-3.4.1/release/lib/ -lopencv_core -lopencv_videostab -lopencv_videoio -lopencv_video -lopencv_superres -lopencv_stitching -lopencv_shape -lopencv_photo -lopencv_objdetect -lopencv_ml -lopencv_java341 -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui -lopencv_flann -lopencv_features2d -lopencv_dnn -lopencv_calib3d
-INCLUDEPATH += $$PWD/../../../../../usr/local/opencv-3.4.1/release/include
-DEPENDPATH += $$PWD/../../../../../usr/local/opencv-3.4.1/release/include
+

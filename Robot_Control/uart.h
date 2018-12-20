@@ -16,12 +16,9 @@ private:
 signals:
     void failedUART();
 public slots:
-    void onSendSignal(int message, int value, int arcStrengthPercentage);
-    void onInitiateAutomaticMode();
-    void onExitAutomaticMode();
-    void onSendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed);
+    void onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int leftWheelSpeedTimesOneHundred);
     void onStopSignal();
-    void terminateConnection();
+    void onTerminateConnection();
 };
 
 #endif // UART_H

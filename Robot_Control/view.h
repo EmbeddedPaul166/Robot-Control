@@ -1,10 +1,6 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <QImage>
 #include <QMainWindow>
 
@@ -35,10 +31,7 @@ private:
 signals:
     void startTransmission();
     void stop();
-    void sendSignal(int message, int value, int otherWheelSpeedPercentegeDuringArcing);
-    void initiateAutomaticMode();
-    void exitAutomaticMode();
-    void sendSignalAutomaticMode(int rightWheelSpeed, int leftWheelSpeed);
+    void sendSignal(int message, int rightWheelSpeed, int leftWheelSpeed);
     void stopSignal();
 public slots:
     void onStream(QImage img);

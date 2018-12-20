@@ -365,7 +365,7 @@ color: rgb(238, 238, 236);</string>
        <string notr="true">color: rgb(117, 80, 123);</string>
       </property>
       <property name="text">
-       <string>Speed [m/s]</string>
+       <string>Speed [cm/s]</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -409,7 +409,7 @@ color: rgb(238, 238, 236);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>0</string>
+         <string>6.6</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -433,7 +433,7 @@ color: rgb(238, 238, 236);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>2</string>
+         <string>33</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -452,6 +452,9 @@ color: rgb(238, 238, 236);</string>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
+      </property>
+      <property name="minimum">
+       <number>20</number>
       </property>
       <property name="maximum">
        <number>100</number>
@@ -494,7 +497,7 @@ color: rgb(238, 238, 236);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>0%</string>
+         <string>1%</string>
         </property>
        </widget>
       </item>
@@ -509,7 +512,7 @@ color: rgb(238, 238, 236);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>0%</string>
+         <string>1%</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -538,6 +541,9 @@ color: rgb(238, 238, 236);</string>
     </item>
     <item>
      <widget class="QSlider" name="arcStrengthSlider">
+      <property name="minimum">
+       <number>1</number>
+      </property>
       <property name="maximum">
        <number>99</number>
       </property>

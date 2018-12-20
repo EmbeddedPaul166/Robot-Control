@@ -1,3 +1,4 @@
+#include <math.h>
 #include "view.h"
 #include "framegenerator.h"
 #include "uart.h"
@@ -10,7 +11,7 @@ View::View(QWidget *parent) :
     ui(new Ui::View),
     m_width(0),
     m_height(0),
-    m_maximumSpeed(2),
+    m_maximumSpeed(33), //edit to change max speed value!!! also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
     isAutomaticModeOn(false)
 
 {
@@ -28,9 +29,6 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
     connect(this, SIGNAL(sendSignal(int, int, int)),pUART, SLOT(onSendSignal(int, int, int)));
-    connect(this, SIGNAL(initiateAutomaticMode()),pUART, SLOT(onInitiateAutomaticMode()));
-    connect(this, SIGNAL(exitAutomaticMode()),pUART, SLOT(onExitAutomaticMode()));
-    connect(this, SIGNAL(sendSignalAutomaticMode(int, int)),pUART, SLOT(onSendSignalAutomaticMode(int, int)));
     connect(pUART , SIGNAL(failedUART()),this , SLOT(onFailedUART()));
     connect(this, SIGNAL(stopSignal()),pUART, SLOT(onStopSignal()));
     connect(ui->moveForwardButton, SIGNAL(pressed()),this , SLOT(onButtonPressed()));
@@ -73,28 +71,37 @@ void View::onStream(QImage img)
 
 void View::onButtonPressed()
 {
-    int speedSliderValue = ui->speedSlider->value();
+    double speedSliderValue = ui->speedSlider->value();
     int arcStrengthPercentageValue = ui->arcStrengthSlider->value();
-    int calculatedSpeed = speedSliderValue*static_cast<int>(m_maximumSpeed);
     if (sender() == ui->moveForwardButton)
     {
-        emit sendSignal(1, calculatedSpeed, arcStrengthPercentageValue);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
     else if (sender() == ui->turnRightButton)
     {
-        emit sendSignal(2, calculatedSpeed, arcStrengthPercentageValue);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(2, rightWheelSpeed, leftWheelSpeed);
     }
     else if (sender() == ui->turnLeftButton)
     {
-        emit sendSignal(3, calculatedSpeed, arcStrengthPercentageValue);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(3, rightWheelSpeed, leftWheelSpeed);
     }
     else if (sender() == ui->arcRightButton)
     {
-        emit sendSignal(4, calculatedSpeed, arcStrengthPercentageValue);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
     else if (sender() == ui->arcLeftButton)
     {
-        emit sendSignal(5, calculatedSpeed, arcStrengthPercentageValue);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
 }
 
@@ -111,7 +118,6 @@ void View::onButtonClicked()
             ui->arcRightButton->setEnabled(false);
             ui->arcLeftButton->setEnabled(false);
             ui->automaticModeButton->setText("Turn off automatic mode");
-            emit initiateAutomaticMode();
         }
         else if (!isAutomaticModeOn)
         {
