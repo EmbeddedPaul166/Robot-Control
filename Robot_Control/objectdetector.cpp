@@ -5,7 +5,10 @@ ObjectDetector::ObjectDetector() :
     m_objectTracker(cv::TrackerKCF::create()),
     m_isObjectDetected(false),
     m_ptrTrackingRectangleBox(),
-    m_circles()
+    m_center(),
+    m_circles(),
+    m_height(),
+    m_width()
 {
     //do nothing...
 }
@@ -33,8 +36,11 @@ void ObjectDetector::detectCircle(cv::Mat &frame)
                 for( size_t i = 0; i < m_circles.size(); i++ )
                 {
                     cv::Point center(cvRound(m_circles[i][0]), cvRound(m_circles[i][1]));
+                    m_center = center;
                     int radius = cvRound(m_circles[i][2]);
-                    m_ptrTrackingRectangleBox = new cv::Rect2d(center.x - radius, center.y - radius, radius*2, radius*2);
+                    m_width = center.x - radius;
+                    m_height = center.y - radius;
+                    m_ptrTrackingRectangleBox = new cv::Rect2d(m_width, m_height, radius*2, radius*2);
                     m_circles.clear();
                     m_isObjectDetected = true;
                     m_objectTracker->init(frame, *m_ptrTrackingRectangleBox);
@@ -44,6 +50,8 @@ void ObjectDetector::detectCircle(cv::Mat &frame)
         else if (m_objectTracker->update(frame, *m_ptrTrackingRectangleBox) && m_isObjectDetected)
         {
             cv::rectangle(frame, *m_ptrTrackingRectangleBox, cv::Scalar(0,0,255), 3, 8, 0);
+            cv::Point nextCenter(static_cast<int>(m_ptrTrackingRectangleBox->x) + m_width/2, static_cast<int>(m_ptrTrackingRectangleBox->y) - m_height/2);
+            m_center = nextCenter;
         }
         if (!m_objectTracker->update(frame, *m_ptrTrackingRectangleBox) && m_isObjectDetected)
         {
@@ -51,4 +59,14 @@ void ObjectDetector::detectCircle(cv::Mat &frame)
             m_objectTracker.release();
         }
     }
+}
+
+cv::Point ObjectDetector::getCenterCoordinates()
+{
+    return m_center;
+}
+
+bool ObjectDetector::isObjectDetected()
+{
+    return m_isObjectDetected;
 }

@@ -33,8 +33,10 @@ signals:
     void stop();
     void sendSignal(int message, int rightWheelSpeed, int leftWheelSpeed);
     void stopSignal();
+    void sendInfoAboutAutomaticMode();
 public slots:
     void onStream(QImage img);
+    void onStreamAutomaticMode(QImage img, int imageArea);
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();

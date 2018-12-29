@@ -22,15 +22,20 @@ public:
 private:
     void run();
     bool m_state;
+    bool m_automaticMode;
     cv::Mat m_frame;
     QImage m_img;
     ObjectDetector m_objectDetector;
+    cv::Point m_center;
+    int m_imageArea;
 signals:
     void stream(QImage img);
+    void streamAutomaticMode(QImage img, int imageArea);
     void clear();
 public slots:
     void onStartTransmission();
     void onStop();
+    void onSendInfoAboutAutomaticMode();
 
 };
 

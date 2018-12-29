@@ -27,8 +27,10 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
 {
     connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
+    connect(pframe, SIGNAL(streamAutomaticMode(QImage, int)), this, SLOT(onStreamAutomaticMode(QImage, int)));
+    connect(this, SIGNAL(sendInfoAboutAutomaticMode()),pframe, SLOT(onSendInfoAboutAutomaticMode()));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
-    connect(this, SIGNAL(sendSignal(int, int, int)),pUART, SLOT(onSendSignal(int, int, int)));
+    connect(this, SIGNAL(sendSignal(int, int, int)), pUART, SLOT(onSendSignal(int, int, int)));
     connect(pUART , SIGNAL(failedUART()),this , SLOT(onFailedUART()));
     connect(this, SIGNAL(stopSignal()),pUART, SLOT(onStopSignal()));
     connect(ui->moveForwardButton, SIGNAL(pressed()),this , SLOT(onButtonPressed()));
@@ -63,6 +65,71 @@ void View::closeEvent(QCloseEvent *event)
 void View::onStream(QImage img)
 {
     out.acquire();
+    m_width = ui->cameraOutputLabel->width();
+    m_height = ui->cameraOutputLabel->height();
+    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    in.release();
+}
+
+void View::onStreamAutomaticMode(QImage img, int imageArea)
+{
+    out.acquire();
+    double speedSliderValue = ui->speedSlider->value();
+    if (imageArea == 0)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 1)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 2)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 3)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 4)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 5)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 6)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 7)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (imageArea == 8)
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+
     m_width = ui->cameraOutputLabel->width();
     m_height = ui->cameraOutputLabel->height();
     ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
@@ -118,6 +185,7 @@ void View::onButtonClicked()
             ui->arcRightButton->setEnabled(false);
             ui->arcLeftButton->setEnabled(false);
             ui->automaticModeButton->setText("Turn off automatic mode");
+            emit sendInfoAboutAutomaticMode();
         }
         else if (!isAutomaticModeOn)
         {
@@ -127,6 +195,7 @@ void View::onButtonClicked()
             ui->arcRightButton->setEnabled(true);
             ui->arcLeftButton->setEnabled(true);
             ui->automaticModeButton->setText("Turn on automatic mode");
+            emit sendInfoAboutAutomaticMode();
         }
     }
     else if (sender() == ui->exitButton)
