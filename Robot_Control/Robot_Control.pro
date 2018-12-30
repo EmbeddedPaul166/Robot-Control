@@ -33,7 +33,7 @@ HEADERS += \
 FORMS += \
     view.ui
 
-
+INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/include/opencv4
 LIBS += -L/usr/local/lib
 LIBS += -lopencv_core
@@ -44,5 +44,6 @@ LIBS += -lopencv_objdetect
 LIBS += -lopencv_videoio
 LIBS += -lopencv_tracking
 LIBS += -lopencv_calib3d
+LIBS += -lwiringPi
 
 

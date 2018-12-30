@@ -8,8 +8,7 @@ FrameGenerator::FrameGenerator(QObject *parent) :
     m_state(false),
     m_automaticMode(false),
     m_frame(),
-    m_flippedFrame(),
-    m_undistortedFlippedFrame(),
+    m_undistortedFrame(),
     m_cameraMatrix({1066.072199882264158, 0.0,                  264.3642126308093339,
                     0.0,                  1065.226505783904031, 242.7143108318139753,
                     0.0,                  0.0,                  1.0}),
@@ -33,11 +32,9 @@ void FrameGenerator::run()
 
         video.read(m_frame); //read single frame from the camera
 
-        cv::flip(m_frame, m_flippedFrame, -1); //invert the frame
+        cv::undistort(m_frame, m_undistortedFrame, m_cameraMatrix, m_distortionCoefficients); //remove distortion from the flipped frame
 
-        cv::undistort(m_flippedFrame, m_undistortedFlippedFrame, m_cameraMatrix, m_distortionCoefficients); //remove distortion from the flipped frame
-
-        m_objectDetector.detectOrTrackCircle(m_undistortedFlippedFrame); //detect circle and initiate tracking or update tracker
+        m_objectDetector.detectOrTrackCircle(m_undistortedFrame); //detect circle and initiate tracking or update tracker
 
         convertToQtSupportedImageFormat(); //convert from BGR to RGB and convert cv::Mat to QImage type
 
@@ -59,9 +56,9 @@ void FrameGenerator::run()
 
 void FrameGenerator::convertToQtSupportedImageFormat()
 {
-    cv::cvtColor(m_undistortedFlippedFrame, m_undistortedFlippedFrame, cv::COLOR_BGR2RGB);
+    cv::cvtColor(m_undistortedFrame, m_undistortedFrame, cv::COLOR_BGR2RGB);
 
-    m_img = QImage(m_undistortedFlippedFrame.data, m_undistortedFlippedFrame.cols, m_undistortedFlippedFrame.rows, static_cast<int>(m_frame.step), QImage::Format_RGB888);
+    m_img = QImage(m_undistortedFrame.data, m_undistortedFrame.cols, m_undistortedFrame.rows, static_cast<int>(m_frame.step), QImage::Format_RGB888);
 }
 
 void FrameGenerator::streamVideo()
@@ -73,7 +70,7 @@ void FrameGenerator::sendInstruction()
 {
     m_xCoordinate = m_objectDetector.getCenterCoordinates().x; //get x coordinate of the middle of the tracked area
 
-    m_imageAreaSize = m_undistortedFlippedFrame.cols/9; //get total x coordinate length of the frame and divide it to 9 areas
+    m_imageAreaSize = m_undistortedFrame.cols/9; //get total x coordinate length of the frame and divide it to 9 areas
 
     m_imageArea = m_xCoordinate/m_imageAreaSize; //check in which area from 0 to 8 the middle of the tracked area resides in
 

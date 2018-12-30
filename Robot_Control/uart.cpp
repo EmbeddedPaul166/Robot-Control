@@ -139,7 +139,7 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
 
 void UART::onStopSignal()
 {
-    serialPutchar(m_fileDescriptor, 'g')
+    serialPutchar(m_fileDescriptor, 'g');
 }
 
 void UART::onTerminateConnection()

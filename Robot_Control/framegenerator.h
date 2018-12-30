@@ -27,8 +27,7 @@ private:
     bool m_state;
     bool m_automaticMode;
     cv::Mat m_frame;
-    cv::Mat m_flippedFrame;
-    cv::Mat m_undistortedFlippedFrame;
+    cv::Mat m_undistortedFrame;
     cv::Matx33d m_cameraMatrix;
     cv::Mat m_distortionCoefficients;
     QImage m_img;
