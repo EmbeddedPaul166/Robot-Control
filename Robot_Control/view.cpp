@@ -11,9 +11,8 @@ View::View(QWidget *parent) :
     ui(new Ui::View),
     m_width(0),
     m_height(0),
-    m_maximumSpeed(33), //edit to change max speed value!!! also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
+    m_maximumSpeed(33), //Edit to change max speed value!!! Also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
     isAutomaticModeOn(false)
-
 {
     ui->setupUi(this);
 }
@@ -23,11 +22,12 @@ View::~View()
     delete ui;
 }
 
-void View::setup(FrameGenerator* pframe, UART *pUART)
+void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot connections
 {
     connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
-    connect(pframe, SIGNAL(streamAutomaticMode(QImage, int)), this, SLOT(onStreamAutomaticMode(QImage, int)));
+    connect(pframe, SIGNAL(sendInstructionInAutomaticMode(int)), this, SLOT(onSendInstructionInAutomaticMode(int)));
+    connect(pframe, SIGNAL(stopInstruction()), this, SLOT(onStopInstruction()));
     connect(this, SIGNAL(sendInfoAboutAutomaticMode()),pframe, SLOT(onSendInfoAboutAutomaticMode()));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
     connect(this, SIGNAL(sendSignal(int, int, int)), pUART, SLOT(onSendSignal(int, int, int)));
@@ -51,7 +51,6 @@ void View::setup(FrameGenerator* pframe, UART *pUART)
 
 void View::showEvent(QShowEvent *event)
 {
-    //QTimer::singleShot(100, this, SLOT(showFullScreen()));
     this->setWindowState(Qt::WindowFullScreen);
     emit startTransmission();
 }
@@ -64,16 +63,24 @@ void View::closeEvent(QCloseEvent *event)
 
 void View::onStream(QImage img)
 {
-    out.acquire();
+    out.acquire(); //acquire semaphore
+
     m_width = ui->cameraOutputLabel->width();
+
     m_height = ui->cameraOutputLabel->height();
-    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-    in.release();
+
+    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation))); //draw camera frame
+
+    in.release(); //release semaphore
 }
 
-void View::onStreamAutomaticMode(QImage img, int imageArea)
+void View::onStopInstruction()
 {
-    out.acquire();
+    emit stopSignal();
+}
+
+void View::onSendInstructionInAutomaticMode(int imageArea)
+{
     double speedSliderValue = ui->speedSlider->value();
     if (imageArea == 0)
     {
@@ -129,11 +136,6 @@ void View::onStreamAutomaticMode(QImage img, int imageArea)
         int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
         emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
-
-    m_width = ui->cameraOutputLabel->width();
-    m_height = ui->cameraOutputLabel->height();
-    ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-    in.release();
 }
 
 void View::onButtonPressed()

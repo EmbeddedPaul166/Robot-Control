@@ -1,9 +1,8 @@
 #ifndef UART_H
 #define UART_H
 
-//#include <wiringSerial.h>
-
 #include <QObject>
+#include <wiringSerial.h>
 
 class UART : public QObject
 {

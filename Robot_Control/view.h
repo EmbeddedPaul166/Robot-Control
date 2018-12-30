@@ -36,7 +36,8 @@ signals:
     void sendInfoAboutAutomaticMode();
 public slots:
     void onStream(QImage img);
-    void onStreamAutomaticMode(QImage img, int imageArea);
+    void onStopInstruction();
+    void onSendInstructionInAutomaticMode(int imageArea);
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();

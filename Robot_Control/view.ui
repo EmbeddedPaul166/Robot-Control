@@ -212,8 +212,7 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(117, 80, 123);
-color: rgb(238, 238, 236);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Arc left</string>
@@ -237,8 +236,7 @@ color: rgb(238, 238, 236);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(117, 80, 123);
-color: rgb(238, 238, 236);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Move forward</string>
@@ -262,8 +260,7 @@ color: rgb(238, 238, 236);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(117, 80, 123);
-color: rgb(238, 238, 236);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Arc right</string>
@@ -294,8 +291,7 @@ color: rgb(238, 238, 236);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(117, 80, 123);
-color: rgb(238, 238, 236);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Turn left</string>
@@ -319,8 +315,7 @@ color: rgb(238, 238, 236);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(117, 80, 123);
-color: rgb(238, 238, 236);</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Turn right</string>
@@ -394,7 +389,7 @@ color: rgb(238, 238, 236);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>0</string>
+         <string>6.6</string>
         </property>
        </widget>
       </item>
