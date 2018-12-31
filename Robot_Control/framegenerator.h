@@ -30,6 +30,8 @@ private:
     cv::Mat m_undistortedFrame;
     cv::Matx33d m_cameraMatrix;
     cv::Mat m_distortionCoefficients;
+    cv::Mat m_distortionMapOne;
+    cv::Mat m_distortionMapTwo;
     QImage m_img;
     ObjectDetector m_objectDetector;
     int m_imageArea;

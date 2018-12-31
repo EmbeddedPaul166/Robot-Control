@@ -13,6 +13,8 @@ FrameGenerator::FrameGenerator(QObject *parent) :
                     0.0,                  1065.226505783904031, 242.7143108318139753,
                     0.0,                  0.0,                  1.0}),
     m_distortionCoefficients({-0.3831924018486001504, -0.4380056186732124712, -0.001564684054709905873, 0.001345324841678506361, 4.018577502467049811}),
+    m_distortionMapOne(),
+    m_distortionMapTwo(),
     m_img(),
     m_objectDetector(),
     m_imageArea(),
@@ -25,6 +27,13 @@ FrameGenerator::FrameGenerator(QObject *parent) :
 void FrameGenerator::run()
 {
     cv::VideoCapture video(0); //open camera by index 0
+    if (video.isOpened())
+    {
+        video.read(m_frame);
+        cv::initUndistortRectifyMap(m_cameraMatrix, m_distortionCoefficients, cv::Mat(), //initialize two distortion maps
+                                    m_cameraMatrix, cv::Size(m_frame.cols, m_frame.rows),
+                                    CV_32FC2, m_distortionMapOne, m_distortionMapTwo);
+    }
 
     while(m_state && video.isOpened())
     {
@@ -32,7 +41,8 @@ void FrameGenerator::run()
 
         video.read(m_frame); //read single frame from the camera
 
-        cv::undistort(m_frame, m_undistortedFrame, m_cameraMatrix, m_distortionCoefficients); //remove distortion from the flipped frame
+        cv::remap(m_frame, m_undistortedFrame, m_distortionMapOne, m_distortionMapTwo, //remove distortion from the frame
+                  cv::INTER_LINEAR);
 
         m_objectDetector.detectOrTrackCircle(m_undistortedFrame); //detect circle and initiate tracking or update tracker
 
@@ -58,7 +68,9 @@ void FrameGenerator::convertToQtSupportedImageFormat()
 {
     cv::cvtColor(m_undistortedFrame, m_undistortedFrame, cv::COLOR_BGR2RGB);
 
-    m_img = QImage(m_undistortedFrame.data, m_undistortedFrame.cols, m_undistortedFrame.rows, static_cast<int>(m_frame.step), QImage::Format_RGB888);
+    m_img = QImage(m_undistortedFrame.data, m_undistortedFrame.cols,
+                   m_undistortedFrame.rows, static_cast<int>(m_frame.step),
+                   QImage::Format_RGB888);
 }
 
 void FrameGenerator::streamVideo()

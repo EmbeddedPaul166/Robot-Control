@@ -4,12 +4,14 @@ ObjectDetector::ObjectDetector() :
     m_grayFrame(),
     m_objectTracker(),
     m_isObjectDetected(false),
+    m_isObjectTooLarge(false),
     m_ptrTrackingRectangleBox(),
     m_center(),
     m_circles(),
     m_height(),
     m_width(),
-    m_radius()
+    m_radius(),
+    m_sideLength()
 {
     //do nothing...
 }
@@ -36,11 +38,15 @@ void ObjectDetector::detectOrTrackCircle(cv::Mat &frame)
                     {
                         initiateNewTrackingRectangleBox();
 
-                        m_circles.clear(); //clear circles output array before next detection to avoid errors
+                        if (m_sideLength < 140) //limit tracked circles in terms of size to improve framerate in close up situations
+                        {
+                            m_circles.clear(); //clear circles output array before next detection to avoid errors
 
-                        m_isObjectDetected = true; //set detection flag to true
+                            m_isObjectDetected = true; //set detection flag to true
 
-                        m_objectTracker->init(frame, *m_ptrTrackingRectangleBox); //initialize tracking
+                            m_objectTracker->init(frame, *m_ptrTrackingRectangleBox); //initialize tracking
+                        }
+
                     }
         }
         else if (m_objectTracker->update(frame, *m_ptrTrackingRectangleBox) && m_isObjectDetected) //if tracker update succeeded
@@ -76,6 +82,7 @@ void ObjectDetector::detectCircles(cv::Mat &frame)
     cv::GaussianBlur(m_grayFrame, m_grayFrame, cv::Size(9, 9), 2, 2); //blur the gray frame using Gaussian filter
 
     cv::HoughCircles(m_grayFrame, m_circles, cv::HOUGH_GRADIENT, 1, m_grayFrame.rows/8, 200, 40, 0, 0); //find circles in a gray scale image using Hough transform
+
 }
 
 void ObjectDetector::initiateNewTrackingRectangleBox()
@@ -84,9 +91,11 @@ void ObjectDetector::initiateNewTrackingRectangleBox()
 
     m_radius = cvRound(m_circles[0][2]); //get radius of the first circle detected
 
+    m_sideLength = m_radius*2;
+
     m_width = m_center->x - m_radius; //calculate x coordinate of the upper left corner of the rectangle
 
     m_height = m_center->y - m_radius; //calculate y coordinate of the upper left corner of the rectangle
 
-    m_ptrTrackingRectangleBox = new cv::Rect2d(m_width, m_height, m_radius*2, m_radius*2); //initiate new rectangle on the detected area
+    m_ptrTrackingRectangleBox = new cv::Rect2d(m_width, m_height, m_sideLength, m_sideLength); //initiate new rectangle on the detected area
 }

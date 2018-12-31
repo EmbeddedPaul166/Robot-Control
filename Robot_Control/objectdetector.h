@@ -20,12 +20,14 @@ private:
     cv::Mat m_grayFrame;
     cv::Ptr<cv::Tracker> m_objectTracker;
     bool m_isObjectDetected;
+    bool m_isObjectTooLarge;
     cv::Rect2d * m_ptrTrackingRectangleBox;
     cv::Point * m_center;
     std::vector<cv::Vec3f> m_circles;
     int m_height;
     int m_width;
     int m_radius;
+    int m_sideLength;
 };
 
 #endif // OBJECTDETECTOR_H

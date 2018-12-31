@@ -1,3 +1,4 @@
+#include <QKeyEvent>
 #include <math.h>
 #include "view.h"
 #include "framegenerator.h"
@@ -47,6 +48,38 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
     connect(ui->arcLeftButton, SIGNAL(released()),this , SLOT(onButtonReleased()));
     connect(ui->speedSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
     connect(ui->arcStrengthSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
+    connect(this, SIGNAL(keyPressed(QString)),this , SLOT(onKeyPressed(QString)));
+    connect(this, SIGNAL(keyReleased()),this , SLOT(onKeyReleased()));
+
+}
+
+void View::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_W)
+    {
+        emit keyPressed("W");
+    }
+    else if (event->key() == Qt::Key_D)
+    {
+        emit keyPressed("D");
+    }
+    else if (event->key() == Qt::Key_A)
+    {
+        emit keyPressed("A");
+    }
+    else if (event->key() == Qt::Key_E)
+    {
+        emit keyPressed("E");
+    }
+    else if (event->key() == Qt::Key_Q)
+    {
+        emit keyPressed("Q");
+    }
+}
+
+void View::keyReleaseEvent(QKeyEvent *event)
+{
+    emit keyReleased();
 }
 
 void View::showEvent(QShowEvent *event)
@@ -207,6 +240,47 @@ void View::onButtonClicked()
 }
 
 void View::onButtonReleased()
+{
+    emit stopSignal();
+}
+
+void View::onKeyPressed(QString keyName)
+{
+    double speedSliderValue = ui->speedSlider->value();
+    int arcStrengthPercentageValue = ui->arcStrengthSlider->value();
+    if (keyName == "W")
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (keyName == "D")
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(2, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (keyName == "A")
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(3, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (keyName == "E")
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+    else if (keyName == "Q")
+    {
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+    }
+}
+
+void View::onKeyReleased()
 {
     emit stopSignal();
 }

@@ -21,6 +21,8 @@ public:
     void setup(FrameGenerator* pframe, UART* pUART);
 
 private:
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     Ui::View *ui;
     int m_width;
     int m_height;
@@ -34,6 +36,8 @@ signals:
     void sendSignal(int message, int rightWheelSpeed, int leftWheelSpeed);
     void stopSignal();
     void sendInfoAboutAutomaticMode();
+    void keyPressed(QString keyName);
+    void keyReleased();
 public slots:
     void onStream(QImage img);
     void onStopInstruction();
@@ -41,6 +45,8 @@ public slots:
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();
+    void onKeyPressed(QString keyName);
+    void onKeyReleased();
     void onSliderChange(int sliderValue);
     void onFailedUART();
 

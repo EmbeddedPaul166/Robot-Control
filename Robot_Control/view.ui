@@ -212,7 +212,8 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">background-color: rgb(189, 107, 255);
+color: rgb(255, 255, 255);</string>
             </property>
             <property name="text">
              <string>Arc left</string>
@@ -236,7 +237,8 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">background-color: rgb(189, 107, 255);
+color: rgb(255, 255, 255);</string>
             </property>
             <property name="text">
              <string>Move forward</string>
@@ -260,7 +262,8 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">background-color: rgb(189, 107, 255);
+color: rgb(255, 255, 255);</string>
             </property>
             <property name="text">
              <string>Arc right</string>
@@ -291,7 +294,8 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">background-color: rgb(189, 107, 255);
+color: rgb(255, 255, 255);</string>
             </property>
             <property name="text">
              <string>Turn left</string>
@@ -315,7 +319,8 @@ color: rgb(255, 255, 255);</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true">background-color: rgb(189, 107, 255);
+color: rgb(255, 255, 255);</string>
             </property>
             <property name="text">
              <string>Turn right</string>
