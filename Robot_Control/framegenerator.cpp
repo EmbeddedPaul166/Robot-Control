@@ -113,4 +113,5 @@ void FrameGenerator::onStop()
 void FrameGenerator::onSendInfoAboutAutomaticMode()
 {
     m_automaticMode = !m_automaticMode;
+    emit stopInstruction();
 }
