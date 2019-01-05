@@ -37,7 +37,7 @@ void FrameGenerator::run()
 
     while(m_state && video.isOpened())
     {
-        in.acquire(); //aqcuire semaphore
+        //in.acquire(); //aqcuire semaphore
 
         video.read(m_frame); //read single frame from the camera
 
@@ -50,7 +50,7 @@ void FrameGenerator::run()
 
         streamVideo(); //send a frame to update View
 
-        out.release(); //release semaphore
+        //out.release(); //release semaphore
 
         if (m_objectDetector.isObjectDetected() && m_automaticMode)
         {

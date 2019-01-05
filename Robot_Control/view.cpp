@@ -12,7 +12,7 @@ View::View(QWidget *parent) :
     ui(new Ui::View),
     m_width(0),
     m_height(0),
-    m_maximumSpeed(33), //Edit to change max speed value!!! Also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
+    m_maximumSpeed(36), //Edit to change max speed value!!! Also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
     isAutomaticModeOn(false)
 {
     ui->setupUi(this);
@@ -26,7 +26,7 @@ View::~View()
 void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot connections
 {
     connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
-    connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)));
+    connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)), Qt::DirectConnection);
     connect(pframe, SIGNAL(sendInstructionInAutomaticMode(int)), this, SLOT(onSendInstructionInAutomaticMode(int)));
     connect(pframe, SIGNAL(stopInstruction()), this, SLOT(onStopInstruction()));
     connect(this, SIGNAL(sendInfoAboutAutomaticMode()),pframe, SLOT(onSendInfoAboutAutomaticMode()));
@@ -96,7 +96,7 @@ void View::closeEvent(QCloseEvent *event)
 
 void View::onStream(QImage img)
 {
-    out.acquire(); //acquire semaphore
+    //out.acquire(); //acquire semaphore
 
     m_width = ui->cameraOutputLabel->width();
 
@@ -104,7 +104,7 @@ void View::onStream(QImage img)
 
     ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation))); //draw camera frame
 
-    in.release(); //release semaphore
+    //in.release(); //release semaphore
 }
 
 void View::onStopInstruction()
@@ -282,7 +282,7 @@ void View::onKeyPressed(QString keyName)
 
 void View::onKeyReleased()
 {
-    emit stopSignal();
+    //emit stopSignal();
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <wiringSerial.h>
+#include <wiringPi.h>
 
 class UART : public QObject
 {

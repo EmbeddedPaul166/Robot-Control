@@ -11,8 +11,12 @@ m_fileDescriptor()
 
 void UART::initiateUART()
 {
-    m_fileDescriptor = serialOpen("/dev/ttyAMA0", 115200);
+    m_fileDescriptor = serialOpen("/dev/ttyS0", 9600);
     if (m_fileDescriptor < 0)
+    {
+        emit failedUART();
+    }
+    if (wiringPiSetup() == -1)
     {
         emit failedUART();
     }
@@ -31,11 +35,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[3]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[3]);
         }
         else if (rightWheelSpeedTimesOneHundred < 1000 && leftWheelSpeedTimesOneHundred >= 1000)
         {
@@ -43,11 +45,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[3]);
         }
         else if (rightWheelSpeedTimesOneHundred >= 1000 && leftWheelSpeedTimesOneHundred < 1000)
         {
@@ -55,11 +55,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[3]);
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
         }
         else if (rightWheelSpeedTimesOneHundred < 1000 && leftWheelSpeedTimesOneHundred < 1000)
         {
@@ -67,11 +65,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
         }
 
     }
@@ -83,11 +79,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[3]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[3]);
         }
         else
         {
@@ -95,11 +89,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
         }
 
     }
@@ -111,11 +103,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[3]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[3]);
         }
         else
         {
@@ -123,11 +113,9 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[1]);
-            serialPutchar (m_fileDescriptor, leftWheelSpeedTimesOneHundredInString[2]);
         }
 
     }
@@ -139,7 +127,13 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
 
 void UART::onStopSignal()
 {
-    serialPutchar(m_fileDescriptor, 'g');
+    serialPutchar(m_fileDescriptor, 'd');
+    serialPutchar (m_fileDescriptor, '0');
+    serialPutchar (m_fileDescriptor, '0');
+    serialPutchar (m_fileDescriptor, '0');
+    serialPutchar (m_fileDescriptor, '0');
+    serialPutchar (m_fileDescriptor, '0');
+    serialPutchar (m_fileDescriptor, '0');
 }
 
 void UART::onTerminateConnection()

@@ -394,7 +394,7 @@ color: rgb(255, 255, 255);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>6.6</string>
+         <string>10.8</string>
         </property>
        </widget>
       </item>
@@ -409,7 +409,7 @@ color: rgb(255, 255, 255);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>6.6</string>
+         <string>10.8</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -433,7 +433,7 @@ color: rgb(255, 255, 255);</string>
          <string notr="true">color: rgb(117, 80, 123);</string>
         </property>
         <property name="text">
-         <string>33</string>
+         <string>36</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -454,7 +454,7 @@ color: rgb(255, 255, 255);</string>
        <string notr="true"/>
       </property>
       <property name="minimum">
-       <number>20</number>
+       <number>30</number>
       </property>
       <property name="maximum">
        <number>100</number>
