@@ -9,14 +9,10 @@ m_fileDescriptor()
     //do nothing...
 }
 
-void UART::initiateUART()
+void UART::onInitiateUART()
 {
-    m_fileDescriptor = serialOpen("/dev/ttyS0", 9600);
+    m_fileDescriptor = serialOpen("/dev/ttyUSB0", 9600);
     if (m_fileDescriptor < 0)
-    {
-        emit failedUART();
-    }
-    if (wiringPiSetup() == -1)
     {
         emit failedUART();
     }

@@ -50,6 +50,8 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
     connect(ui->arcStrengthSlider, SIGNAL(valueChanged(int)),this , SLOT(onSliderChange(int)));
     connect(this, SIGNAL(keyPressed(QString)),this , SLOT(onKeyPressed(QString)));
     connect(this, SIGNAL(keyReleased()),this , SLOT(onKeyReleased()));
+    connect(this, SIGNAL(initiateUART()), pUART, SLOT(onInitiateUART()));
+    emit initiateUART();
 
 }
 
@@ -302,6 +304,6 @@ void View::onSliderChange(int sliderValue)
 
 void View::onFailedUART()
 {
-    ui->speedDisplayLabel->setText("ERROR: UART CONNECTION NOT ESTABLISHED");
+    ui->speedLabel->setText("ERROR: UART CONNECTION NOT ESTABLISHED");
 }
 

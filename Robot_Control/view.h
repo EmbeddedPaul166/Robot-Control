@@ -38,6 +38,7 @@ signals:
     void sendInfoAboutAutomaticMode();
     void keyPressed(QString keyName);
     void keyReleased();
+    void initiateUART();
 public slots:
     void onStream(QImage img);
     void onStopInstruction();

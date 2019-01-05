@@ -3,15 +3,13 @@
 
 #include <QObject>
 #include <wiringSerial.h>
-#include <wiringPi.h>
 
 class UART : public QObject
 {
     Q_OBJECT
 public:
     explicit UART(QObject *parent = nullptr);
-private:
-    void initiateUART();
+private: 
     int m_fileDescriptor;
 signals:
     void failedUART();
@@ -19,6 +17,7 @@ public slots:
     void onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int leftWheelSpeedTimesOneHundred);
     void onStopSignal();
     void onTerminateConnection();
+    void onInitiateUART();
 };
 
 #endif // UART_H
