@@ -42,6 +42,7 @@ private:
     STEERING_SIGNAL m_action;
     double m_imageArea;
     int m_imageAreaRoundedUp;
+    int m_previousImageAreaRoundedUp;
     int m_xCoordinate;
     int m_imageAreaSize;
     int m_middlePointXCoordinate;

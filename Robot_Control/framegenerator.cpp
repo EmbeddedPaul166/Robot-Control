@@ -102,20 +102,30 @@ void FrameGenerator::calculateActionAndSendAppropriateSignal()
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
 
-        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Move forward"); //send signal
+        if (m_previousImageAreaRoundedUp != m_imageAreaRoundedUp)
+        {
+            emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Move forward"); //send signal
+        }
     }
     else if (m_action == STEERING_SIGNAL::ARC_RIGHT)
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
 
-        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc right"); //send signal
+        if (m_previousImageAreaRoundedUp != m_imageAreaRoundedUp)
+        {
+            emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc right"); //send signal
+        }
     }
     else if (m_action == STEERING_SIGNAL::ARC_LEFT)
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
 
-        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc left"); //send signal
+        if (m_previousImageAreaRoundedUp != m_imageAreaRoundedUp)
+        {
+            emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc left"); //send signal
+        }
     }
+    m_previousImageAreaRoundedUp = m_imageAreaRoundedUp;
 }
 
 void FrameGenerator::calculateObjectLocation()
@@ -127,6 +137,7 @@ void FrameGenerator::calculateObjectLocation()
 
 void FrameGenerator::sendStopInstruction()
 {
+    m_previousImageAreaRoundedUp = 10;
     emit stopInstruction();
 }
 
@@ -166,6 +177,8 @@ void FrameGenerator::onStop()
 void FrameGenerator::onSendInfoAboutAutomaticMode()
 {
     m_automaticMode = !m_automaticMode;
+
+    m_previousImageAreaRoundedUp = 10;
 
     m_timer.stop();
 
