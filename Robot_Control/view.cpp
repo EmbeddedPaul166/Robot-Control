@@ -3,7 +3,6 @@
 #include "view.h"
 #include "framegenerator.h"
 #include "uart.h"
-#include "globals.h"
 #include "ui_view.h"
 
 
@@ -52,6 +51,8 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
     connect(this, SIGNAL(keyPressed(QString)),this , SLOT(onKeyPressed(QString)));
     connect(this, SIGNAL(keyReleased()),this , SLOT(onKeyReleased()));
     connect(this, SIGNAL(initiateUART()), pUART, SLOT(onInitiateUART()));
+    connect(pframe, SIGNAL(startTimerSingleShot()), pframe, SLOT(onStartTimerSingleShot()));
+    connect(pframe, SIGNAL(stopTimer()), pframe, SLOT(onStopTimer()));
     emit initiateUART(); //comment this to see uart messages in console
 }
 
@@ -130,6 +131,7 @@ void View::showEvent(QShowEvent *event)
 void View::closeEvent(QCloseEvent *event)
 {
     emit stop();
+    emit stopSignal();
 }
 
 

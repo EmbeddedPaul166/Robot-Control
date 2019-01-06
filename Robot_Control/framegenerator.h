@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QtCore>
 #include <QImage>
+#include <QTimer>
 
 #include "objectdetector.h"
 #include "tristateregulator.h"
@@ -35,6 +36,7 @@ private:
     cv::Mat m_distortionMapOne;
     cv::Mat m_distortionMapTwo;
     QImage m_img;
+    QTimer m_timer;
     ObjectDetector m_objectDetector;
     TristateRegulator m_tristateRegulator;
     STEERING_SIGNAL m_action;
@@ -47,11 +49,15 @@ signals:
     void stream(QImage img);
     void sendInstructionInAutomaticMode(int imageArea, QString steeringSignal);
     void stopInstruction();
+    void stopTimer();
+    void startTimerSingleShot();
 public slots:
     void onStartTransmission();
     void onStop();
     void onSendInfoAboutAutomaticMode();
-
+    void sendStopInstruction();
+    void onStartTimerSingleShot();
+    void onStopTimer();
 };
 
 #endif // FRAMEGEN_H

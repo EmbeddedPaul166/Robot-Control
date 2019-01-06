@@ -1,7 +1,6 @@
 #include <math.h>
 #include "framegenerator.h"
 #include "view.h"
-#include "globals.h"
 
 
 FrameGenerator::FrameGenerator(QObject *parent) :
@@ -17,6 +16,7 @@ FrameGenerator::FrameGenerator(QObject *parent) :
     m_distortionMapOne(),
     m_distortionMapTwo(),
     m_img(),
+    m_timer(),
     m_objectDetector(),
     m_tristateRegulator(),
     m_action(),
@@ -25,15 +25,21 @@ FrameGenerator::FrameGenerator(QObject *parent) :
     m_imageAreaSize(),
     m_middlePointXCoordinate()
 {
-    //do nothing...
+    m_timer.setInterval(1000);
+
+    m_timer.setSingleShot(true);
+
+    QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(sendStopInstruction()));
 }
 
 void FrameGenerator::run()
 {
     cv::VideoCapture video(0); //open camera by index 0
+
     if (video.isOpened())
     {
         video.read(m_frame);
+
         cv::initUndistortRectifyMap(m_cameraMatrix, m_distortionCoefficients, cv::Mat(), //initialize two distortion maps
                                     m_cameraMatrix, cv::Size(m_frame.cols, m_frame.rows),
                                     CV_32FC2, m_distortionMapOne, m_distortionMapTwo);
@@ -54,11 +60,16 @@ void FrameGenerator::run()
 
         if (m_objectDetector.isObjectDetected() && m_automaticMode)
         {
+            if (m_timer.isActive())
+            {
+                emit stopTimer();
+            }
+
             calculateActionAndSendAppropriateSignal(); //calculate in which area detected object is and send appropriate instruction code
         }
-        else if (!m_objectDetector.isObjectDetected() && m_automaticMode)
+        else if (!m_objectDetector.isObjectDetected() && m_automaticMode && !m_timer.isActive())
         {
-            emit stopInstruction(); //send stop signal if object is no longer detected, check if this will screw with the automatic mode!!!!
+            emit startTimerSingleShot();
         }
     }
 }
@@ -90,16 +101,19 @@ void FrameGenerator::calculateActionAndSendAppropriateSignal()
     if (m_action == STEERING_SIGNAL::MOVE_FORWARD)
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
+
         emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Move forward"); //send signal
     }
     else if (m_action == STEERING_SIGNAL::ARC_RIGHT)
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
+
         emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc right"); //send signal
     }
     else if (m_action == STEERING_SIGNAL::ARC_LEFT)
     {
         calculateObjectLocation(); //calculate in which area middle of the object resides in
+
         emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc left"); //send signal
     }
 }
@@ -107,7 +121,23 @@ void FrameGenerator::calculateActionAndSendAppropriateSignal()
 void FrameGenerator::calculateObjectLocation()
 {
     m_imageArea = static_cast<double>(m_xCoordinate)/static_cast<double>(m_imageAreaSize);
+
     m_imageAreaRoundedUp = static_cast<int>(ceil(m_imageArea));
+}
+
+void FrameGenerator::sendStopInstruction()
+{
+    emit stopInstruction();
+}
+
+void FrameGenerator::onStartTimerSingleShot()
+{
+    m_timer.start();
+}
+
+void FrameGenerator::onStopTimer()
+{
+    m_timer.stop();
 }
 
 void FrameGenerator::onStartTransmission()
@@ -115,6 +145,7 @@ void FrameGenerator::onStartTransmission()
     if(!isRunning())
     {
         m_state = true;
+
         start();
     }
     else
@@ -126,12 +157,17 @@ void FrameGenerator::onStartTransmission()
 void FrameGenerator::onStop()
 {
     m_state = false;
+
     quit(); //tell the thread to exit it's run loop
+
     wait(); //join the thread
 }
 
 void FrameGenerator::onSendInfoAboutAutomaticMode()
 {
     m_automaticMode = !m_automaticMode;
+
+    m_timer.stop();
+
     emit stopInstruction();
 }

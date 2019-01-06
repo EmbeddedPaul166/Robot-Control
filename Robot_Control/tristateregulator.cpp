@@ -2,7 +2,7 @@
 #include "tristateregulator.h"
 
 TristateRegulator::TristateRegulator() :
-m_error()
+    m_error()
 {
     //do nothing...
 }
