@@ -13,7 +13,8 @@ View::View(QWidget *parent) :
     m_width(0),
     m_height(0),
     m_maximumSpeed(36), //Edit to change max speed value!!! Also remember to change the initial value on the speedSliderLabel and change minimum value on the slider!!!
-    isAutomaticModeOn(false)
+    isAutomaticModeOn(false),
+    m_isKeyPressed(false)
 {
     ui->setupUi(this);
 }
@@ -51,37 +52,73 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
     connect(this, SIGNAL(keyPressed(QString)),this , SLOT(onKeyPressed(QString)));
     connect(this, SIGNAL(keyReleased()),this , SLOT(onKeyReleased()));
     connect(this, SIGNAL(initiateUART()), pUART, SLOT(onInitiateUART()));
-    emit initiateUART();
-
+    emit initiateUART(); //comment this to see uart messages in console
 }
 
 void View::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_W)
+    if (event->isAutoRepeat())
     {
+        event->ignore();
+    }
+    else if(event->key() == Qt::Key_W)
+    {
+        this->grabKeyboard();
         emit keyPressed("W");
     }
     else if (event->key() == Qt::Key_D)
     {
+        this->grabKeyboard();
         emit keyPressed("D");
     }
     else if (event->key() == Qt::Key_A)
     {
+        this->grabKeyboard();
         emit keyPressed("A");
     }
     else if (event->key() == Qt::Key_E)
     {
+        this->grabKeyboard();
         emit keyPressed("E");
     }
     else if (event->key() == Qt::Key_Q)
     {
+        this->grabKeyboard();
         emit keyPressed("Q");
     }
 }
 
 void View::keyReleaseEvent(QKeyEvent *event)
 {
-    emit keyReleased();
+    if (event->isAutoRepeat())
+    {
+        event->ignore();
+    }
+    else if(event->key() == Qt::Key_W)
+    {
+        this->releaseKeyboard();
+        emit keyReleased();
+    }
+    else if (event->key() == Qt::Key_D)
+    {
+        this->releaseKeyboard();
+        emit keyReleased();
+    }
+    else if (event->key() == Qt::Key_A)
+    {
+        this->releaseKeyboard();
+        emit keyReleased();
+    }
+    else if (event->key() == Qt::Key_E)
+    {
+        this->releaseKeyboard();
+        emit keyReleased();
+    }
+    else if (event->key() == Qt::Key_Q)
+    {
+        this->releaseKeyboard();
+        emit keyReleased();
+    }
 }
 
 void View::showEvent(QShowEvent *event)
@@ -98,15 +135,11 @@ void View::closeEvent(QCloseEvent *event)
 
 void View::onStream(QImage img)
 {
-    //out.acquire(); //acquire semaphore
-
     m_width = ui->cameraOutputLabel->width();
 
     m_height = ui->cameraOutputLabel->height();
 
     ui->cameraOutputLabel->setPixmap(QPixmap::fromImage(img.scaled(m_width, m_height,Qt::KeepAspectRatio,Qt::SmoothTransformation))); //draw camera frame
-
-    //in.release(); //release semaphore
 }
 
 void View::onStopInstruction()
@@ -284,7 +317,7 @@ void View::onKeyPressed(QString keyName)
 
 void View::onKeyReleased()
 {
-    //emit stopSignal();
+    emit stopSignal();
 }
 
 

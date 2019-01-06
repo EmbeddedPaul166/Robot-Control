@@ -37,8 +37,6 @@ void FrameGenerator::run()
 
     while(m_state && video.isOpened())
     {
-        //in.acquire(); //aqcuire semaphore
-
         video.read(m_frame); //read single frame from the camera
 
         cv::remap(m_frame, m_undistortedFrame, m_distortionMapOne, m_distortionMapTwo, //remove distortion from the frame
@@ -49,8 +47,6 @@ void FrameGenerator::run()
         convertToQtSupportedImageFormat(); //convert from BGR to RGB and convert cv::Mat to QImage type
 
         streamVideo(); //send a frame to update View
-
-        //out.release(); //release semaphore
 
         if (m_objectDetector.isObjectDetected() && m_automaticMode)
         {

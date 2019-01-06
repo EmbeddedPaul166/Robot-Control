@@ -28,6 +28,7 @@ private:
     int m_height;
     double m_maximumSpeed;
     bool isAutomaticModeOn;
+    bool m_isKeyPressed;
     void closeEvent (QCloseEvent *event);
     void showEvent(QShowEvent *event);
 signals:
