@@ -31,7 +31,7 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
     connect(pframe, SIGNAL(sendInstructionInAutomaticMode(int)), this, SLOT(onSendInstructionInAutomaticMode(int)));
     connect(pframe, SIGNAL(stopInstruction()), this, SLOT(onStopInstruction()));
     connect(this, SIGNAL(sendInfoAboutAutomaticMode()),pframe, SLOT(onSendInfoAboutAutomaticMode()));
-    connect(this, SIGNAL(stop()),pframe, SLOT(onStop()));
+    connect(this, SIGNAL(stop()),pframe, SLOT(onStop()), Qt::DirectConnection);
     connect(this, SIGNAL(sendSignal(int, int, int)), pUART, SLOT(onSendSignal(int, int, int)));
     connect(pUART , SIGNAL(failedUART()),this , SLOT(onFailedUART()));
     connect(this, SIGNAL(stopSignal()),pUART, SLOT(onStopSignal()));

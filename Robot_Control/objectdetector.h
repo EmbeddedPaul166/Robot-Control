@@ -11,14 +11,13 @@ class ObjectDetector
 public:
     ObjectDetector();
     ~ObjectDetector();
-    void detectOrTrackCircle(cv::Mat &frame);
+    void detectCircle(cv::Mat &frame);
     cv::Point getCenterCoordinates();
     bool isObjectDetected();
 private:
     void detectCircles(cv::Mat &frame);
-    void initiateNewTrackingRectangleBox();
+    void initiateNewTrackingRectangleBox(cv::Mat &frame);
     cv::Mat m_grayFrame;
-    cv::Ptr<cv::Tracker> m_objectTracker;
     bool m_isObjectDetected;
     bool m_isObjectTooLarge;
     cv::Rect2d * m_ptrTrackingRectangleBox;

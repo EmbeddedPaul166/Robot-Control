@@ -39,25 +39,24 @@ void FrameGenerator::run()
     {
         video.read(m_frame); //read single frame from the camera
 
-        cv::remap(m_frame, m_undistortedFrame, m_distortionMapOne, m_distortionMapTwo, //remove distortion from the frame
-                  cv::INTER_LINEAR);
+        cv::remap(m_frame, m_undistortedFrame, m_distortionMapOne, //remove distortion from the frame
+                  m_distortionMapTwo, cv::INTER_LINEAR);
 
-        m_objectDetector.detectOrTrackCircle(m_undistortedFrame); //detect circle and initiate tracking or update tracker
+        m_objectDetector.detectCircle(m_undistortedFrame); //detect circle
 
         convertToQtSupportedImageFormat(); //convert from BGR to RGB and convert cv::Mat to QImage type
 
-        streamVideo(); //send a frame to update View
+        streamFrame(); //send a frame to update View
 
         if (m_objectDetector.isObjectDetected() && m_automaticMode)
         {
-            sendInstruction(); //calculate in which area detected object is and send appropriate instruction code
+            calculateAndSendInstruction(); //calculate in which area detected object is and send appropriate instruction code
         }
         else if (!m_objectDetector.isObjectDetected() && m_automaticMode)
         {
             emit stopInstruction();
         }
     }
-    emit clear(); //clear visible frames on shutdown
 }
 
 void FrameGenerator::convertToQtSupportedImageFormat()
@@ -69,12 +68,12 @@ void FrameGenerator::convertToQtSupportedImageFormat()
                    QImage::Format_RGB888);
 }
 
-void FrameGenerator::streamVideo()
+void FrameGenerator::streamFrame()
 {
     emit stream(m_img);
 }
 
-void FrameGenerator::sendInstruction()
+void FrameGenerator::calculateAndSendInstruction()
 {
     m_xCoordinate = m_objectDetector.getCenterCoordinates().x; //get x coordinate of the middle of the tracked area
 
@@ -103,7 +102,8 @@ void FrameGenerator::onStartTransmission()
 void FrameGenerator::onStop()
 {
     m_state = false;
-    wait();
+    quit(); //test this
+    //wait(); //check if this is necessary
 }
 
 void FrameGenerator::onSendInfoAboutAutomaticMode()

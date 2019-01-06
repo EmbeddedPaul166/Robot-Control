@@ -22,8 +22,8 @@ public:
 private:
     void run();
     void convertToQtSupportedImageFormat();
-    void streamVideo();
-    void sendInstruction();
+    void streamFrame();
+    void calculateAndSendInstruction();
     bool m_state;
     bool m_automaticMode;
     cv::Mat m_frame;
@@ -40,7 +40,6 @@ private:
 signals:
     void stream(QImage img);
     void sendInstructionInAutomaticMode(int imageArea);
-    void clear();
     void stopInstruction();
 public slots:
     void onStartTransmission();
