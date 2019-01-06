@@ -43,7 +43,7 @@ signals:
 public slots:
     void onStream(QImage img);
     void onStopInstruction();
-    void onSendInstructionInAutomaticMode(int imageArea);
+    void onSendInstructionInAutomaticMode(int imageArea, QString steeringSignal);
     void onButtonPressed();
     void onButtonClicked();
     void onButtonReleased();

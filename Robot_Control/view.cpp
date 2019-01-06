@@ -28,7 +28,7 @@ void View::setup(FrameGenerator* pframe, UART *pUART) //declare signal and slot 
 {
     connect(this, SIGNAL(startTransmission()), pframe, SLOT(onStartTransmission()));
     connect(pframe, SIGNAL(stream(QImage)), this, SLOT(onStream(QImage)), Qt::DirectConnection);
-    connect(pframe, SIGNAL(sendInstructionInAutomaticMode(int)), this, SLOT(onSendInstructionInAutomaticMode(int)));
+    connect(pframe, SIGNAL(sendInstructionInAutomaticMode(int, QString)), this, SLOT(onSendInstructionInAutomaticMode(int, QString)));
     connect(pframe, SIGNAL(stopInstruction()), this, SLOT(onStopInstruction()));
     connect(this, SIGNAL(sendInfoAboutAutomaticMode()),pframe, SLOT(onSendInfoAboutAutomaticMode()));
     connect(this, SIGNAL(stop()),pframe, SLOT(onStop()), Qt::DirectConnection);
@@ -147,62 +147,71 @@ void View::onStopInstruction()
     emit stopSignal();
 }
 
-void View::onSendInstructionInAutomaticMode(int imageArea)
+void View::onSendInstructionInAutomaticMode(int imageArea, QString steeringSignal)
 {
     double speedSliderValue = ui->speedSlider->value();
-    if (imageArea == 0)
+    if (steeringSignal == "Move forward")
     {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        if (imageArea == 5)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
     }
-    else if (imageArea == 1)
+    else if (steeringSignal == "Arc left")
     {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        if (imageArea == 1)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 2)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 3)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 4)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
     }
-    else if (imageArea == 2)
+    else if (steeringSignal == "Arc right")
     {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 3)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 4)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 5)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 6)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 7)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
-    }
-    else if (imageArea == 8)
-    {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        if (imageArea == 6)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 7)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 8)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
+        else if (imageArea == 9)
+        {
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
+        }
     }
 }
 

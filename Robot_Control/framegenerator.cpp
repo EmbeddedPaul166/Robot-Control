@@ -1,3 +1,4 @@
+#include <math.h>
 #include "framegenerator.h"
 #include "view.h"
 #include "globals.h"
@@ -17,9 +18,12 @@ FrameGenerator::FrameGenerator(QObject *parent) :
     m_distortionMapTwo(),
     m_img(),
     m_objectDetector(),
+    m_tristateRegulator(),
+    m_action(),
     m_imageArea(),
     m_xCoordinate(),
-    m_imageAreaSize()
+    m_imageAreaSize(),
+    m_middlePointXCoordinate()
 {
     //do nothing...
 }
@@ -50,11 +54,11 @@ void FrameGenerator::run()
 
         if (m_objectDetector.isObjectDetected() && m_automaticMode)
         {
-            calculateAndSendInstruction(); //calculate in which area detected object is and send appropriate instruction code
+            calculateActionAndSendAppropriateSignal(); //calculate in which area detected object is and send appropriate instruction code
         }
         else if (!m_objectDetector.isObjectDetected() && m_automaticMode)
         {
-            emit stopInstruction();
+            emit stopInstruction(); //send stop signal if object is no longer detected, check if this will screw with the automatic mode!!!!
         }
     }
 }
@@ -73,17 +77,37 @@ void FrameGenerator::streamFrame()
     emit stream(m_img);
 }
 
-void FrameGenerator::calculateAndSendInstruction()
+void FrameGenerator::calculateActionAndSendAppropriateSignal()
 {
+    m_middlePointXCoordinate = m_undistortedFrame.cols/2; //get x coordinate of the middle point in the frame
+
     m_xCoordinate = m_objectDetector.getCenterCoordinates().x; //get x coordinate of the middle of the tracked area
 
     m_imageAreaSize = m_undistortedFrame.cols/9; //get total x coordinate length of the frame and divide it to 9 areas
 
-    m_imageArea = m_xCoordinate/m_imageAreaSize; //check in which area from 0 to 8 the middle of the tracked area resides in
+    m_tristateRegulator.calculate(m_middlePointXCoordinate, m_xCoordinate, m_imageAreaSize, m_action); //check which steering signal to use
 
-    if (m_imageArea > 8) m_imageArea = 8;
+    if (m_action == STEERING_SIGNAL::MOVE_FORWARD)
+    {
+        calculateObjectLocation(); //calculate in which area middle of the object resides in
+        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Move forward"); //send signal
+    }
+    else if (m_action == STEERING_SIGNAL::ARC_RIGHT)
+    {
+        calculateObjectLocation(); //calculate in which area middle of the object resides in
+        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc right"); //send signal
+    }
+    else if (m_action == STEERING_SIGNAL::ARC_LEFT)
+    {
+        calculateObjectLocation(); //calculate in which area middle of the object resides in
+        emit sendInstructionInAutomaticMode(m_imageAreaRoundedUp, "Arc left"); //send signal
+    }
+}
 
-    emit sendInstructionInAutomaticMode(m_imageArea); //send appropriate instruction code from 0 to 8
+void FrameGenerator::calculateObjectLocation()
+{
+    m_imageArea = static_cast<double>(m_xCoordinate)/static_cast<double>(m_imageAreaSize);
+    m_imageAreaRoundedUp = static_cast<int>(ceil(m_imageArea));
 }
 
 void FrameGenerator::onStartTransmission()
@@ -102,8 +126,8 @@ void FrameGenerator::onStartTransmission()
 void FrameGenerator::onStop()
 {
     m_state = false;
-    quit(); //test this
-    //wait(); //check if this is necessary
+    quit(); //tell the thread to exit it's run loop
+    wait(); //join the thread
 }
 
 void FrameGenerator::onSendInfoAboutAutomaticMode()
