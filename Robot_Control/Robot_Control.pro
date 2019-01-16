@@ -19,16 +19,16 @@ SOURCES += \
     main.cpp \
     view.cpp \
     framegenerator.cpp \
-    globals.cpp \
     uart.cpp \
-    objectdetector.cpp
+    objectdetector.cpp \
+    tristateregulator.cpp
 
 HEADERS += \
     view.h \
     framegenerator.h \
-    globals.h \
     uart.h \
-    objectdetector.h
+    objectdetector.h \
+    tristateregulator.h
 
 FORMS += \
     view.ui
