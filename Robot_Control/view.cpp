@@ -165,26 +165,26 @@ void View::onSendInstructionInAutomaticMode(int imageArea, QString steeringSigna
     {
         if (imageArea == 1)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 2)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 3)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 4)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
     }
@@ -192,26 +192,26 @@ void View::onSendInstructionInAutomaticMode(int imageArea, QString steeringSigna
     {
         if (imageArea == 6)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(95)*0.01);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 7)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(80)*0.01);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 8)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(65)*0.01);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
         else if (imageArea == 9)
         {
-            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
-            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+            int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(50)*0.01);
+            int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
             emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
         }
     }
@@ -241,14 +241,14 @@ void View::onButtonPressed()
     }
     else if (sender() == ui->arcRightButton)
     {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
         emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
     else if (sender() == ui->arcLeftButton)
     {
-        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
-        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
+        int leftWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed);
+        int rightWheelSpeed = static_cast<int>(speedSliderValue*m_maximumSpeed*static_cast<double>(arcStrengthPercentageValue)*0.01);
         emit sendSignal(1, rightWheelSpeed, leftWheelSpeed);
     }
 }
