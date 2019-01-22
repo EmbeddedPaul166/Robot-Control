@@ -71,7 +71,7 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
     {
         if (rightWheelSpeedTimesOneHundred >= 1000)
         {
-            serialPutchar (m_fileDescriptor, 'c');
+            serialPutchar (m_fileDescriptor, 'b');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
@@ -81,7 +81,7 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
         }
         else
         {
-            serialPutchar (m_fileDescriptor, 'c');
+            serialPutchar (m_fileDescriptor, 'b');
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
@@ -95,7 +95,7 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
     {
         if (rightWheelSpeedTimesOneHundred >= 1000)
         {
-            serialPutchar(m_fileDescriptor, 'b');
+            serialPutchar(m_fileDescriptor, 'c');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[2]);
@@ -105,7 +105,7 @@ void UART::onSendSignal(int message, int rightWheelSpeedTimesOneHundred, int lef
         }
         else
         {
-            serialPutchar (m_fileDescriptor, 'b');
+            serialPutchar (m_fileDescriptor, 'c');
             serialPutchar (m_fileDescriptor, '0');
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[0]);
             serialPutchar (m_fileDescriptor, rightWheelSpeedTimesOneHundredInString[1]);
