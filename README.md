@@ -1,3 +1,6 @@
+# Robot Control
+
+### Brief Description
 Robot-Control is an application targeted at Raspberry Pi 3B+, to control the semi-autonomous three-wheeled robot (two wheeled drive, third for support) with camera and vision feedback.
 It was made specifically for my engineering thesis. Technologies used were C++ 11, Qt and OpenCV.
 
@@ -6,3 +9,4 @@ Robot was suited for work in two modes, first being manual, in which you could c
 
 Raspberry Pi 3B+ was only used as upper level control centre. There was also an ATmega8A with implemented PID controller steering the DC motors and it received orders from RPI through UART. It's code is not a part of this repository though.
 
+<img src="https://github.com/EmbeddedPaul166/Robot-Control/blob/master/Robot.jpg" height="600" width="600">
